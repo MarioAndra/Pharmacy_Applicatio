@@ -11,16 +11,21 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('warehouses', function (Blueprint $table) {
+        Schema::create('products', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-        
+            $table->string('name_product');
+            $table->double('price');
+            $table->foreignId('category_id')->refrences('id')->on('categories')->cascadeOnDelete();
             $table->timestamps();
+
         });
     }
+
+    /**
+     * Reverse the migrations.
+     */
     public function down(): void
     {
         //
     }
-
 };

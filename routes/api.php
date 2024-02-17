@@ -2,10 +2,10 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BaseController;
 use App\Http\Controllers\UserController;
-use App\Http\Controllers\AdminController;
+use App\Http\Controllers\ProductController;
+use App\Http\Controllers\CategoryController;
 use App\Models\User;
 use App\Models\Medicin;
 
@@ -20,33 +20,30 @@ use App\Models\Medicin;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
+
+
+Route::group(['middleware' => 'auth:sanctum'], function () {
+ });
+
+ Route::prefix('v1/')->group(function () {
+
+    Route::post('create',[UserController::class,'createUser']);
+    Route::post('Update_user/{id}',[UserController::class,'updatUser']);
+    Route::get('Users',[UserController::class,'showUser']);
+    Route::delete('deleteUsers/{id}',[UserController::class,'deleteUser']);
+
+
+    Route::post('create_Product',[ProductController::class,'createProduct']);
+    Route::delete('delete_product/{id}',[ProductController::class,'deleteProduct']);
+    Route::post('update_product/{id}',[ProductController::class,'updateProduct']);
+    Route::get('show_product',[ProductController::class,'showProduct']);
+
+
+    Route::post('create_category',[CategoryController::class,'createCategory']);
+    Route::get('show_product_in_category/{id}',[CategoryController::class,'ShowProductInCategory']);
+    Route::get('Show_get_category',[CategoryController::class,'showCategory']);
+    Route::delete('delete_category/{id}',[CategoryController::class,'deletCategory']);
+    Route::post('update_category/{id}',[CategoryController::class,'updateCategory']);
+
 });
-Route::get('category/{warehouse_id}',[UserController::class,'BrowseMedicinByCategory']);
-Route::post('regester',[AuthController::class,'regester']);
-Route::post('login',[AuthController::class,'login']);
-Route::group(['middleware' => 'auth:sanctum'], function () {
-    Route::post('logout',[AuthController::class,'logout']);
-
-
-    Route::get('serchMedicin',[UserController::class,'serchMedicin']);
-    Route::get('user/show/orders', [UserController::class, 'ShowOrders']);
-    Route::post('order/{warehouse_id}', [UserController::class, 'order']);
-
-    });
-    Route::get('NameWareHouse',[UserController::class,'NameWareHouse']);
-Route::post('Adminregester',[AdminController::class,'Adminregester']);
-Route::post('loginAdmin',[AdminController::class,'loginAdmin']);
-Route::group(['middleware' => 'auth:sanctum'], function () {
-    Route::post('logoutAdmin',[AdminController::class,'logoutAdmin']);
-    Route::post('addMedicin',[AdminController::class,'addMedicin']);
-    Route::post('update/order/{orderId}', [AdminController::class, 'UpdateOrderStatus']);
-    Route::get('admin/show/orders', [AdminController::class, 'ShowOrdersAdmin']);
-    });
-   // Route::post('createWareHouse',[AdminController::class, 'createWareHouse']);
-
-
-
-
 

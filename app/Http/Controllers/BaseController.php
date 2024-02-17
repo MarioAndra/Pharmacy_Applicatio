@@ -28,13 +28,5 @@ class BaseController extends Controller
         return response()->json($response,$code);
 
        }
-       public function sendLog($result,$message){
-        $response=[
-            'success'=>true,
-            'data'=>$result,
-            'message'=>$message
-        ];
-        return response()->json($response,200);
-       }
-
+    
 }

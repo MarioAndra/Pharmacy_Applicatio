@@ -2,28 +2,17 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Notifications\Notifiable;
-use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Database\Eloquent\Model;
 use Carbon\Carbon;
-class User extends Authenticatable
+class Product extends Model
 {
-    use HasApiTokens, HasFactory, Notifiable;
-
-
+    use HasFactory;
     protected $fillable = [
-        'name',
-        'number',
-        'email',
-        'password',
-    ];
+        'name_product',
+        'price',
+        'category_id',
 
-
-    protected $hidden = [
-        'password',
-        'remember_token',
     ];
 
     public function toArray()
@@ -33,16 +22,14 @@ class User extends Authenticatable
 
         return $array;
     }
-
-
-
+    public function category()
+    {
+        return $this->BelongsTo(Category::class,'category_id');
+    }
+    
     public function getCreatedFromAttribute()
     {
         return Carbon::parse($this->created_at)->diffForHumans(null,true);
     }
-
-
-
-
 
 }
