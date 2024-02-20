@@ -2,32 +2,26 @@
 
 namespace App\Http\Controllers;
 use Validator;
+use App\Http\Requests\requestCreateProduct;
+use App\Http\Requests\requestUpdateProduct;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use App\Models\User;
 use App\Models\Product;
 use App\Models\Category;
 
 
 
+
 class ProductController extends BaseController
 {
 
-        public function createProduct(Request $request){
-            $validat=Validator::make($request->all(),[
-             'name_product'=>'required',
-             'price'=>'required',
-             'category_id'=>'required',
-            ]);
-            if($validat->fails()){
-             return $this->sendError('',$validat->errors(),500);
-            }
-            else{
+        public function createProduct(requestCreateProduct $request){
 
              $product=Product::create($request->all());
              return $this->sendResponse('','product create successfully');
-            }
 
-         }
+        }
 
 
     public function deleteProduct($id){
@@ -41,35 +35,22 @@ class ProductController extends BaseController
         }
     }
 
-    public function updateProduct(Request $request,$id){
+
+    public function updateProduct(requestUpdateProduct $request,$id){
         $product=Product::find($id);
 
         if($product){
-        $validat=Validator::make($request->all(),[
-            'name_product'=>'required',
-            'price'=>'required',
-            'category_id'=>'required',
-        ]);
-        if($validat->fails())
-        {
-            return $this->sendError('',$validat->errors(),500);
-        }
-        else{
-            $product->name_product=$request->name_product;
-            $product->price=$request->price;
-            $product->category_id=$request->category_id;
+
+          $product->update($request->all());
+          
             $product->save();
             return $this->sendResponse('','Product updated successfully');
-        }
     }
         return $this->sendError('','product not found');
 }
 
-
-
-
     public function showProduct(){
-        $product=Product::with('category')->get()->all();
+        $product=Product::with('category')->with('user')->get()->all();
         return $this->sendResponse($product,'Done');
     }
 

@@ -12,6 +12,7 @@ class Product extends Model
         'name_product',
         'price',
         'category_id',
+        'user_id',
 
     ];
 
@@ -26,7 +27,12 @@ class Product extends Model
     {
         return $this->BelongsTo(Category::class,'category_id');
     }
-    
+
+    public function user(){
+
+        return $this->BelongsTo(User::class,'user_id');
+    }
+
     public function getCreatedFromAttribute()
     {
         return Carbon::parse($this->created_at)->diffForHumans(null,true);

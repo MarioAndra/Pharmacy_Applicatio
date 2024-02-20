@@ -17,6 +17,7 @@ class ProductFactory extends Factory
             'name_product' => $this->faker->word,
             'price' => $this->faker->randomFloat(2, 10, 1000),
             'category_id' => Category::factory()->create(),
+            'user_id'=>User::factory()->create(),
 
         ];
     }

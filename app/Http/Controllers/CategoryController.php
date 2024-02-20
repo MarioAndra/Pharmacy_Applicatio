@@ -1,7 +1,8 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use App\Http\Requests\requestCreateCategory;
+use App\Http\Requests\requestUpdateCategory;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Product;
@@ -10,19 +11,9 @@ use Validator;
 
 class CategoryController extends BaseController
 {
-    public function createCategory(Request $request){
-        $validat=Validator::make($request->all(),[
-         'name_category'=>'required'
-        ]);
-        if($validat->fails()){
-         return $this->sendError('',$validat->errors(),500);
-        }
-        else{
-
+    public function createCategory(requestCreateCategory $request){
             $category=Category::create($request->all());
          return $this->sendResponse('','category create successfully');
-        }
-
      }
 
 
@@ -56,24 +47,15 @@ class CategoryController extends BaseController
         }
     }
 
-    public function updateCategory(Request $request,$id){
+    public function updateCategory(requestUpdateCategory $request,$id){
         $category=Category::find($id);
-
         if($category){
-        $validat=Validator::make($request->all(),[
-            'name_category'=>'required'
-        ]);
-        if($validat->fails())
-        {
-            return $this->sendError('',$validat->errors(),500);
-        }
-        else{
-            $category->name_category=$request->name_category;
+            $category->update($request->all());
             $category->save();
-            return $this->sendResponse('','Product updated successfully');
-        }
+            return $this->sendResponse('','Category updated successfully');
+
     }
-        return $this->sendError('','product not found');
+        return $this->sendError('','Category not found');
 }
 
 }
