@@ -14,9 +14,11 @@ use App\Models\Photo;
 class ProductController extends BaseController
 {
 
+
     public function index(){
-        $product=Product::where('price','>=','150')->with('category')
+        $product=Product::with('category')
         ->with('photos')
+        ->pricedAbove()
         ->get()->all();
         return $this->sendResponse($product,'done');
     }

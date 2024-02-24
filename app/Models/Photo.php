@@ -7,11 +7,12 @@ use Illuminate\Database\Eloquent\Model;
 
 class Photo extends Model
 {
+    
     use HasFactory;
     protected $fillable = [
         'rcs',
      ];
-     
+
      public function photoable(){
         return $this->morphTo();
      }

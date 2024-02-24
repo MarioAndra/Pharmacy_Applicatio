@@ -12,6 +12,7 @@ use Validator;
 class CategoryController extends BaseController
 {
 
+
     public function store(requestCategory $request)
     {
         $category=Category::create($request->all());

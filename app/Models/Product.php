@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Carbon\Carbon;
 class Product extends Model
 {
+
     use HasFactory;
     protected $fillable = [
         'name_product',
@@ -40,6 +41,11 @@ class Product extends Model
 
     public function photos(){
         return $this->morphMany(Photo::class,'photoable');
+    }
+
+    public function scopePricedAbove($query, $price = 150)
+    {
+        return $query->where('price', '>=', $price);
     }
 
 

@@ -53,7 +53,8 @@ class User extends Authenticatable
 
     public function products(){
 
-        return $this->hasMany(Product::class,'user_id')->where('price','>=','150');
+        return $this->hasMany(Product::class,'user_id')->pricedAbove();
+
     }
 
     public function photos(){

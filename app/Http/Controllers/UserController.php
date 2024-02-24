@@ -18,11 +18,6 @@ class UserController extends BaseController
 {
 
 
-
-
-
-
-
     public function store(requestUser $request,PasswordRequest $requestPasssowrd)
     {
         $input=$request->all();
