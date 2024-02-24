@@ -14,10 +14,9 @@ class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
 
-    /*protected $casts=[
-        'password'=>'',
-        'password_confirm'=>'hashed',
-    ];*/
+    protected $casts=[
+        'password'=>'hashed',
+    ];
 
 
     protected $fillable = [
@@ -30,8 +29,8 @@ class User extends Authenticatable
 
 
     protected $hidden = [
-        //'password',
-        //'password_confirm',
+        'password',
+        
         'remember_token',
     ];
 
@@ -55,6 +54,10 @@ class User extends Authenticatable
     public function products(){
 
         return $this->hasMany(Product::class,'user_id');
+    }
+
+    public function photos(){
+        return $this->morphMany(Photo::class,'photoable');
     }
 
 

@@ -38,4 +38,9 @@ class Product extends Model
         return Carbon::parse($this->created_at)->diffForHumans(null,true);
     }
 
+    public function photos(){
+        return $this->morphMany(Photo::class,'photoable');
+    }
+
+
 }

@@ -23,12 +23,17 @@ class Category extends Model
 
     public function products()
         {
-            return $this->hasMany(Product::class,'category_id');
+            return $this->hasMany(Product::class,'category_id')
+            ->where('price','>=','150');
         }
 
 
         public function getCreatedFromAttribute()
         {
             return Carbon::parse($this->created_at)->diffForHumans(null,true);
+        }
+
+        public function photos(){
+            return $this->morphMany(Photo::class,'photoable');
         }
 }
