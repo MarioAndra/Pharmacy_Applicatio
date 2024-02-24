@@ -11,7 +11,7 @@ use App\Models\User;
 
 Route::apiResource('user', UserController::class);
 
-Route::post('update/User/Password/{id}',[UserController::class,'updatePassword']);
+Route::put('update/User/Password/{id}',[UserController::class,'updatePassword']);
 
 
 
