@@ -14,6 +14,13 @@ use App\Models\Photo;
 class ProductController extends BaseController
 {
 
+    public function index(){
+        $product=Product::where('price','>=','150')->with('category')
+        ->with('photos')
+        ->get()->all();
+        return $this->sendResponse($product,'done');
+    }
+
 
     public function store(requestProduct $request)
     {
@@ -33,7 +40,9 @@ class ProductController extends BaseController
 
     public function show(string $id)
     {
-        $product=Product::find($id)->with('category')->with('photos')->with('user')->get()->all();
+        $product=Product::find($id)->with('category')
+        ->with('photos')->with('user')->where('price','>=','150')
+        ->get()->all();
         return $this->sendResponse($product,'Done');
     }
 

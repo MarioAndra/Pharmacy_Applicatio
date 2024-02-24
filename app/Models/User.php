@@ -30,7 +30,7 @@ class User extends Authenticatable
 
     protected $hidden = [
         'password',
-        
+
         'remember_token',
     ];
 
@@ -53,7 +53,7 @@ class User extends Authenticatable
 
     public function products(){
 
-        return $this->hasMany(Product::class,'user_id');
+        return $this->hasMany(Product::class,'user_id')->where('price','>=','150');
     }
 
     public function photos(){

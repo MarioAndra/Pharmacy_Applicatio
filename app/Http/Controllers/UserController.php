@@ -44,7 +44,8 @@ class UserController extends BaseController
 
     public function show(string $id)
     {
-        $user=User::find($id)->with('photos')->get()->all();
+        $user=User::find($id)->with('photos')
+        ->with('products')->get()->all();
         return $this->sendResponse($user,'Done');
     }
 
