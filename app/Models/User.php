@@ -10,11 +10,12 @@ use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Database\Eloquent\Concerns\HasAttributes;
 use Illuminate\Support\Facades\Hash;
 use Carbon\Carbon;
+use App\Traits\Image;
 class User extends Authenticatable
 {
-    use HasApiTokens, HasFactory, Notifiable;
+    use HasApiTokens, HasFactory, Notifiable,Image;
 
-    protected $with = ['photos:rcs,photoable_id','products'];
+
 
     protected $casts=[
         'password'=>'hashed',
@@ -63,8 +64,21 @@ class User extends Authenticatable
         return $this->morphMany(Photo::class,'photoable');
     }
 
+    public static function boot()
+    {
+    parent::boot();
+
+    static::deleting(function($user) {
+        foreach($user->photos as $photo) {
+            $photoPath = public_path('/images/user_photo/' . $photo->rcs);
+            if(file_exists($photoPath)) {
+                unlink($photoPath);
+            }
+            $photo->delete();
+        }
+});
 
 
 
-
+}
 }

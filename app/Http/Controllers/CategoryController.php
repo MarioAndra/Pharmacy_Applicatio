@@ -35,6 +35,7 @@ class CategoryController extends BaseController
     public function show(string $id)
     {
         $category = Category::find($id);
+        
         if(!$category){
             return $this->sendError('', 'This category not found');
         }
@@ -78,8 +79,8 @@ class CategoryController extends BaseController
 
 
         });
-           // return $this->sendResponse('','category deleted successfuly');
-           return $category;
+            return $this->sendResponse('','category deleted successfuly');
+
         }
     }
 }

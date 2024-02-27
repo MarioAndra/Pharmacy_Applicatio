@@ -41,5 +41,15 @@ class Photo extends Model
                 $photo->rcs = asset($photo->rcs);
             });
     }
+    protected static function boot() {
+        parent::boot();
+        static::deleting(function ($image) {
+            if (static::where('rcs',$image->rcs)->exists())
+            {
+                Storage::disk('public')->delete($image->rcs);
+            }
+        });
+    }
+
 
 }

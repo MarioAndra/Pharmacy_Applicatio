@@ -12,9 +12,10 @@ return new class extends Migration
         Schema::create('categories', function (Blueprint $table) {
             $table->id();
             $table->string('name_category');
-            $table->unsignedBigInteger('parent_id')->nullable()->constrained()
-            ->cascadeOnDelete()->nullable()->default(0);;
-
+            $table->unsignedBigInteger('parent_id')
+            ->nullable()
+            ->constrained()
+            ->cascadeOnDelete();
             $table->timestamps();
         });
     }

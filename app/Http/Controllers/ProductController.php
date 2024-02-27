@@ -20,7 +20,7 @@ class ProductController extends BaseController
 
 
     public function index(){
-        $product=Product::get();
+        $product=Product::with(['photos'])->get();
         return $this->sendResponse($product,'done');
     }
 
@@ -39,7 +39,7 @@ class ProductController extends BaseController
 
     public function show(string $id)
     {
-        $product=Product::find($id);
+        $product=Product::with(['photos','user'])->find($id);
         if($product){
             $product->get();
             return $this->sendResponse($product,'done');
@@ -79,6 +79,7 @@ class ProductController extends BaseController
             DB::transaction(function () use ($product) {
                 
                 $product->delete();
+
             });
         return $this->sendResponse('','Product deleted successfully');
         }

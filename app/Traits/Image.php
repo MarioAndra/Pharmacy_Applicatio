@@ -30,4 +30,6 @@ trait Image
         $product->photos()->update(['rcs'=>$filename]);
         $product->save();
     }
+
+    
 }

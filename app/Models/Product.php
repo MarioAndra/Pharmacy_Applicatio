@@ -6,11 +6,12 @@ use App\Models\Scopes\priceScope;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Carbon\Carbon;
+use App\Traits\Image;
 class Product extends Model
 {
 
-    protected $with = ['photos:rcs,photoable_id','user'];
-    use HasFactory;
+
+    use HasFactory,Image;
     protected $fillable = [
         'name',
         'price',
@@ -29,12 +30,12 @@ class Product extends Model
 
     public function category()
     {
-        return $this->BelongsTo(Category::class);
+        return $this->BelongsTo(Category::class,'category_id');
     }
 
     public function user(){
 
-        return $this->BelongsTo(User::class,'user_id');
+        return $this->BelongsTo(User::class);
     }
 
     public function getCreatedFromAttribute()
@@ -59,6 +60,23 @@ class Product extends Model
             $q->where('name', 'like', 'a%');
         });
     }
+    public static function boot()
+    {
+    parent::boot();
+
+    static::deleting(function($product) {
+        foreach($product->photos as $photo) {
+            $photoPath = public_path('/images/product_photo/' . $photo->rcs);
+            if(file_exists($photoPath)) {
+                unlink($photoPath);
+            }
+            $photo->delete();
+        }
+});
+
+
+
+}
 
 
 
