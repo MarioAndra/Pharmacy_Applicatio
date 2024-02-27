@@ -14,6 +14,8 @@ class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
 
+    protected $with = ['photos:rcs,photoable_id','products'];
+
     protected $casts=[
         'password'=>'hashed',
     ];
@@ -53,7 +55,7 @@ class User extends Authenticatable
 
     public function products(){
 
-        return $this->hasMany(Product::class,'user_id')->pricedAbove();
+        return $this->hasMany(Product::class,'user_id');
 
     }
 

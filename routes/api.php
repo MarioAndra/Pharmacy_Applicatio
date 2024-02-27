@@ -27,9 +27,9 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
  });
  Route::prefix('v1/')->group(function () {
 
-    include('user.php');
-    include('category.php');
-    include('product.php');
+    include('Task/user.php');
+    include('Task/category.php');
+    include('Task/product.php');
 });
 
 

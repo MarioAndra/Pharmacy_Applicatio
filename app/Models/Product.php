@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Models;
+use App\Models\Scopes\priceScope;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -8,9 +9,10 @@ use Carbon\Carbon;
 class Product extends Model
 {
 
+    protected $with = ['photos:rcs,photoable_id','user'];
     use HasFactory;
     protected $fillable = [
-        'name_product',
+        'name',
         'price',
         'category_id',
         'user_id',
@@ -24,9 +26,10 @@ class Product extends Model
 
         return $array;
     }
+
     public function category()
     {
-        return $this->BelongsTo(Category::class,'category_id');
+        return $this->BelongsTo(Category::class);
     }
 
     public function user(){
@@ -43,10 +46,21 @@ class Product extends Model
         return $this->morphMany(Photo::class,'photoable');
     }
 
-    public function scopePricedAbove($query, $price = 150)
+
+
+    protected static function booted(): void
     {
-        return $query->where('price', '>=', $price);
+        static::addGlobalScope(new priceScope);
     }
+
+    public function scopeStartsWithA($query)
+    {
+        return $query->whereHas('user', function ($q) {
+            $q->where('name', 'like', 'a%');
+        });
+    }
+
+
 
 
 }

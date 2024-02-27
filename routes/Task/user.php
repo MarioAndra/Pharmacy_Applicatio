@@ -8,7 +8,7 @@ use App\Models\User;
 
 
 
-Route::apiResource('user', UserController::class);
+Route::apiResource('users', UserController::class);
 
 Route::put('update/User/Password/{id}',[UserController::class,'updatePassword']);
 

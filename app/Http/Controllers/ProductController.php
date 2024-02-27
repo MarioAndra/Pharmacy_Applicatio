@@ -3,23 +3,24 @@
 
 namespace App\Http\Controllers;
 use Validator;
+use App\Traits\Image;
 use App\Http\Requests\requestProduct;
+use App\Http\Requests\updateProductRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
+use Illuminate\Support\Facades\DB;
 use App\Models\Product;
 use App\Models\Category;
 use App\Models\Photo;
 
 class ProductController extends BaseController
 {
+    use Image;
 
 
     public function index(){
-        $product=Product::with('category')
-        ->with('photos')
-        ->pricedAbove()
-        ->get()->all();
+        $product=Product::get();
         return $this->sendResponse($product,'done');
     }
 
@@ -28,13 +29,9 @@ class ProductController extends BaseController
     {
         $product=Product::create($request->all());
 
-                foreach ($request->file('images') as $image) {
-                    $filename = time().'.'.$image->getClientOriginalName();
-                    $image->move(public_path('images'), $filename);
-                    $photo = new Photo;
-                    $photo->rcs = '/images/'.$filename;
-                    $product->photos()->save($photo);
-                }
+      foreach ($request->file('images') as $image) {
+            $photoPath = $this->storeImage($image,$product,'/images/product_photo/');
+        }
 
              return $this->sendResponse($product,'product create successfully');
     }
@@ -42,31 +39,31 @@ class ProductController extends BaseController
 
     public function show(string $id)
     {
-        $product=Product::find($id)->with('category')
-        ->with('photos')->with('user')->where('price','>=','150')
-        ->get()->all();
-        return $this->sendResponse($product,'Done');
+        $product=Product::find($id);
+        if($product){
+            $product->get();
+            return $this->sendResponse($product,'done');
+        }
+        return $this->sendError('','Invalid',500);
     }
 
 
 
 
-     public function Update(requestProduct $request,$id){
+     public function Update(updateProductRequest $request,$id){
         $product=Product::find($id);
 
         if($product){
 
           $product->update($request->all());
-
+            if($request->hasFile('images')){
             foreach ($request->file('images') as $newImage) {
-                $filename = time().'.'.$newImage->getClientOriginalName();
-                $newImage->move(public_path('images'), $filename);
-                $product->photos()->update(['rcs'=>$filename]);
-                $product->save();
+                $photoPath=$this->updateImageProduct($newImage,$product,'/images/product_photo/');
 
             }
-
             return $this->sendResponse($product,'Product updated successfully');
+        }
+
     }
         return $this->sendError('','product not found');
 }
@@ -79,8 +76,10 @@ class ProductController extends BaseController
             return $this->sendError('','product not found');
         }
         else{
-        $product->photos()->delete();
-        $product->delete();
+            DB::transaction(function () use ($product) {
+                
+                $product->delete();
+            });
         return $this->sendResponse('','Product deleted successfully');
         }
     }

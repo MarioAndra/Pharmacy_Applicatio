@@ -4,6 +4,6 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\PhotoController;
 
 
-Route::apiResource('category', CategoryController::class);
+Route::apiResource('categories', CategoryController::class);
 
 

@@ -12,7 +12,7 @@ class requestUser extends FormRequest
         return true;
     }
 
-    
+
     public function rules(): array
     {
         return [
@@ -20,7 +20,7 @@ class requestUser extends FormRequest
             'name'=>'required|string|min:3|max:15',
             'email'=>'required|email',
             'number'=>'required|between:10,10',
-            'image' => 'required|image|mimes:jpg,png,gif|max:2700|dimensions:max_width=3840,max_height=2160|'
+            'image' => 'required|image|mimes:jpg,png,gif|max:2764800|dimensions:max_width=3840,max_height=2160|'
 
         ];
 

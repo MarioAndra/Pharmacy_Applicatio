@@ -7,7 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Photo extends Model
 {
-    
+
+
     use HasFactory;
     protected $fillable = [
         'rcs',
@@ -19,12 +20,11 @@ class Photo extends Model
 
      public function toArray()
      {
-         $array = parent::toArray();
-         $array['created_at'] = $this->getCreatedFromAttribute();
 
-
-         return $array;
+         return ['rcs' => $this->rcs];
      }
+
+
 
 
 
@@ -33,5 +33,13 @@ class Photo extends Model
          return Carbon::parse($this->created_at)->diffForHumans(null,true);
 
      }
+     protected static function booted()
+    {
+        parent::boot();
+
+            static::retrieved(function ($photo) {
+                $photo->rcs = asset($photo->rcs);
+            });
+    }
 
 }

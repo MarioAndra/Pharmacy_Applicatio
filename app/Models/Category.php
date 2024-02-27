@@ -8,9 +8,11 @@ use Illuminate\Database\Eloquent\Model;
 class Category extends Model
 {
 
+
     use HasFactory;
     protected $fillable = [
         'name_category',
+        'parent_id',
 
     ];
 
@@ -24,7 +26,7 @@ class Category extends Model
 
     public function products()
         {
-            return $this->hasMany(Product::class,'category_id')->pricedAbove();
+            return $this->hasMany(Product::class);
         }
 
 
@@ -36,4 +38,16 @@ class Category extends Model
         public function photos(){
             return $this->morphMany(Photo::class,'photoable');
         }
+
+        public function parentCategory()
+            {
+                return $this->belongsTo(Category::class);
+            }
+
+        public function subCategories()
+            {
+                return $this->hasMany(Category::class)->with(['photos','products']);
+            }
+
+
 }
