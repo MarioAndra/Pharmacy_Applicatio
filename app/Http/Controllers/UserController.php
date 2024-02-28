@@ -21,7 +21,7 @@ class UserController extends BaseController
     use Image;
 
     public function index(){
-        $user=User::get();
+        $user=User::with(['products'])->get();
         return $this->sendResponse($user,'done');
     }
 
@@ -30,7 +30,7 @@ class UserController extends BaseController
 
     public function show(string $id)
     {
-        $user=User::find($id)->get();
+        $user=User::find($id)->with(['products'])->get();
         return $this->sendResponse($user,'Done');
     }
 

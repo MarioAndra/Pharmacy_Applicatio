@@ -2,7 +2,6 @@
 
 namespace App\Models;
 use App\Models\Scopes\priceScope;
-
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Carbon\Carbon;
@@ -10,7 +9,6 @@ use App\Traits\Image;
 use Illuminate\Support\Facades\Storage;
 class Product extends Model
 {
-
 
     use HasFactory,Image;
     protected $fillable = [
