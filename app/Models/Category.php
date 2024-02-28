@@ -5,6 +5,7 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Traits\Image;
+use Illuminate\Support\Facades\Storage;
 class Category extends Model
 {
 
@@ -26,7 +27,7 @@ class Category extends Model
 
     public function products()
         {
-            return $this->hasMany(Product::class,'category_id');
+            return $this->hasMany(Product::class,'category_id')->with('user');
         }
 
 
@@ -68,7 +69,7 @@ class Category extends Model
                     $photoPath = public_path('images/category_photo/' . $photo->filename);
 
                     if (file_exists($photoPath) && !is_dir($photoPath)) {
-                        unlink($photoPath);
+                        Storage::delete($photoPath);
                     }
                     $photo->delete();
                 }

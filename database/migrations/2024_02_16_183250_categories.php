@@ -13,6 +13,7 @@ return new class extends Migration
             $table->id();
             $table->string('name_category');
             $table->unsignedBigInteger('parent_id')
+            ->default(0)
             ->nullable()
             ->constrained()
             ->cascadeOnDelete();

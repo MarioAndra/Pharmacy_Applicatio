@@ -6,7 +6,8 @@ trait Image
     public function storeImage($file,$user,$path)
     {
         $filename = time().'.'.$file->getClientOriginalName();
-        $file->move(public_path($path), $filename);
+
+        $file->move(public_path($path),$filename);
         $photo = new Photo;
         $photo->rcs = '/images/'.$filename;
         $user->photos()->save($photo);
@@ -31,5 +32,5 @@ trait Image
         $product->save();
     }
 
-    
+
 }

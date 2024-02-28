@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Carbon\Carbon;
 use App\Traits\Image;
+use Illuminate\Support\Facades\Storage;
 class Product extends Model
 {
 
@@ -68,7 +69,7 @@ class Product extends Model
         foreach($product->photos as $photo) {
             $photoPath = public_path('/images/product_photo/' . $photo->rcs);
             if(file_exists($photoPath)) {
-                unlink($photoPath);
+                Storage::delete($photoPath);
             }
             $photo->delete();
         }

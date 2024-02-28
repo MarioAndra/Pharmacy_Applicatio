@@ -20,7 +20,7 @@ class ProductController extends BaseController
 
 
     public function index(){
-        $product=Product::with(['photos'])->get();
+        $product=Product::with(['photos','user'])->get();
         return $this->sendResponse($product,'done');
     }
 
@@ -77,7 +77,7 @@ class ProductController extends BaseController
         }
         else{
             DB::transaction(function () use ($product) {
-                
+
                 $product->delete();
 
             });

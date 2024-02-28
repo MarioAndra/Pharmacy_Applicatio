@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Models;
-
+use Illuminate\Support\Facades\Storage;
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -65,20 +65,17 @@ class User extends Authenticatable
     }
 
     public static function boot()
-    {
+{
     parent::boot();
 
     static::deleting(function($user) {
         foreach($user->photos as $photo) {
-            $photoPath = public_path('/images/user_photo/' . $photo->rcs);
+            $photoPath = public_path('images/user_photo/'.$photo->rcs);
             if(file_exists($photoPath)) {
-                unlink($photoPath);
+                Storage::delete($photoPath);
             }
             $photo->delete();
         }
-});
-
-
-
-}
+     });
+    }
 }

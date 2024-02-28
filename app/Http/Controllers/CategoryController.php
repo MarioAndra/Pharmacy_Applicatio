@@ -35,7 +35,7 @@ class CategoryController extends BaseController
     public function show(string $id)
     {
         $category = Category::find($id);
-        
+
         if(!$category){
             return $this->sendError('', 'This category not found');
         }
