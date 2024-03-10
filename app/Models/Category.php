@@ -27,7 +27,7 @@ class Category extends Model
 
     public function products()
         {
-            return $this->hasMany(Product::class,'category_id')->with('user');
+            return $this->hasMany(Product::class,'category_id')->startsWithA();
         }
 
 
@@ -42,42 +42,24 @@ class Category extends Model
 
         public function parentCategory()
             {
-                return $this->belongsTo(Category::class);
+                return $this->belongsTo(Category::class,'parent_id');
             }
 
         public function subCategories()
             {
-                return $this->hasMany(Category::class,'parent_id');
+                return $this->hasMany(Category::class,'parent_id')
+                ->with(['subCategories','products.user']);
             }
 
-            protected static function booted() {
-                static::deleting(function ($category) {
-                    if (! $category->subCategories->isEmpty()) {
-                        foreach ($category->subCategories as $child) {
-                            $child->delete();
-                        }
-                    }
-                });
-            }
 
-            public static function boot()
-            {
-            parent::boot();
-
-            static::deleting(function($category) {
-                foreach($category->photos as $photo) {
-                    $photoPath = public_path('images/category_photo/' . $photo->filename);
-
-                    if (file_exists($photoPath) && !is_dir($photoPath)) {
-                        Storage::delete($photoPath);
-                    }
-                    $photo->delete();
-                }
-        });
+    public function scopeParent(Builder $builder) {
+        $builder->whereNull('parent_id');
+    }
 
 
 
-        }
+
+
 
 
 }

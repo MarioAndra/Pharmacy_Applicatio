@@ -2,14 +2,13 @@
 
 namespace App\Http\Controllers;
 use App\Traits\Image;
-use App\Http\Requests\requestCategory;
-use App\Http\Requests\updateCategoryRequest;
-use Illuminate\Http\Request;
+use App\Http\Requests\Categories\{
+    requestCategory,
+    requestUpdateCategory
+};
 use Illuminate\Support\Facades\DB;
-use App\Models\User;
-use App\Models\Product;
 use App\Models\Category;
-use App\Models\Photo;
+
 use Validator;
 
 class CategoryController extends BaseController
@@ -17,9 +16,8 @@ class CategoryController extends BaseController
     use Image;
 
     public function index(){
-        $category = Category::with(['products' => function ($q) {
-            $q->startsWithA();
-        }, 'photos','subCategories'])->get();
+        $category = Category::with('subCategories')
+        ->parent()->get();
         return $this->sendResponse($category,'done');
     }
 
@@ -40,16 +38,14 @@ class CategoryController extends BaseController
             return $this->sendError('', 'This category not found');
         }
         else{
-            $category = Category::with(['products' => function ($q) {
-                $q->startsWithA();
-            }, 'photos','subCategories'])->find($id);
+            $category = Category::with('subCategories')->find($id);
         return $this->sendResponse($category, 'Done');
     }
 
 
 }
 
-    public function Update(updateCategoryRequest $request,$id){
+    public function Update(requestUpdateCategory $request,$id){
         $category=Category::find($id);
         if($category){
             $category->update($request->all());
@@ -73,13 +69,12 @@ class CategoryController extends BaseController
             return $this->sendError('','this category not found',500);
         }
         else{
-            DB::transaction(function () use ($category) {
-
+           return DB::transaction(function () use ($category) {
+            $category->photos()->delete();
                $category->delete();
-
-
+               return $this->sendResponse('','category deleted successfuly');
         });
-            return $this->sendResponse('','category deleted successfuly');
+
 
         }
     }

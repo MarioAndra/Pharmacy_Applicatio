@@ -25,6 +25,7 @@ class User extends Authenticatable
        'name',
        'email',
        'number',
+       'isAdmin',
     ];
 
 
@@ -32,7 +33,7 @@ class User extends Authenticatable
 
     protected $hidden = [
         'password',
-
+        'updated_at',
         'remember_token',
     ];
 
@@ -63,18 +64,5 @@ class User extends Authenticatable
         return $this->morphMany(Photo::class,'photoable');
     }
 
-    public static function boot()
-{
-    parent::boot();
 
-    static::deleting(function($user) {
-        foreach($user->photos as $photo) {
-            $photoPath = public_path('images/user_photo/'.$photo->rcs);
-            if(file_exists($photoPath)) {
-                Storage::delete($photoPath);
-            }
-            $photo->delete();
-        }
-     });
-    }
 }

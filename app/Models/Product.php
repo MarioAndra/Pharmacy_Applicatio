@@ -16,6 +16,7 @@ class Product extends Model
         'price',
         'category_id',
         'user_id',
+        'status',
 
     ];
 
@@ -59,25 +60,6 @@ class Product extends Model
             $q->where('name', 'like', 'a%');
         });
     }
-    public static function boot()
-    {
-    parent::boot();
-
-    static::deleting(function($product) {
-        foreach($product->photos as $photo) {
-            $photoPath = public_path('/images/product_photo/' . $photo->rcs);
-            if(file_exists($photoPath)) {
-                Storage::delete($photoPath);
-            }
-            $photo->delete();
-        }
-});
-
-
-
-}
-
-
 
 
 }

@@ -3,17 +3,17 @@
 namespace App\Http\Controllers;
 use App\Traits\Image;
 use Illuminate\Http\Request;
-use App\Http\Requests\updateUserRequest;
-use App\Http\Requests\requestUser;
-use App\Http\Requests\PasswordRequest;
+use App\Http\Requests\Users\{
+    requestUser,
+    requestUpdateUser,
+    requestPassword
+};
+
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\Concerns\HasAttributes;
 use Validator;
 use App\Models\User;
-use App\Models\Product;
-use App\Models\Category;
-use App\Models\Photo;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
 class UserController extends BaseController
@@ -21,7 +21,7 @@ class UserController extends BaseController
     use Image;
 
     public function index(){
-        $user=User::with(['products'])->get();
+        $user=User::with(['photos','products.photos'])->get();
         return $this->sendResponse($user,'done');
     }
 
@@ -30,13 +30,13 @@ class UserController extends BaseController
 
     public function show(string $id)
     {
-        $user=User::find($id)->with(['products'])->get();
+        $user=User::find($id)->with(['products.photos'])->get();
         return $this->sendResponse($user,'Done');
     }
 
 
 
-    public function store(Request $request, PasswordRequest $passwordRequest)
+    public function store(requestUser $request, requestPassword $passwordRequest)
     {
         $user = new User;
         $user->fill($request->all());
@@ -50,7 +50,7 @@ class UserController extends BaseController
 
 
 
-   public function Update(updateUserRequest $request,string $id)
+   public function Update(requestUpdateUser $request,string $id)
     {
         $user=User::find($id);
         if($user){
@@ -66,7 +66,7 @@ class UserController extends BaseController
 
 
 
-    public function updatePassword(PasswordRequest $requestPasssowrd,$id){
+    public function updatePassword(requestPassword $requestPasssowrd,$id){
         $user=User::find($id);
         if($user){
             $user->forceFill([
@@ -83,14 +83,17 @@ class UserController extends BaseController
     public function destroy($id)
     {
         $user=User::find($id);
-        if($user){
-            DB::transaction(function () use ($user) {
-                $user->delete();
-            });
-        return $this->sendResponse('','User and his products deleted successfuly ');
+        if(!$user){
+            return $this->sendError('','user not found',403);
         }
         else{
-            return $this->sendError('','user not found',500);
+      return  DB::transaction(function () use ($user) {
+                $user->photos()->delete();
+                $user->delete();
+                return $this->sendResponse('','User deleted successfuly ');
+         });
+
         }
+
     }
 }

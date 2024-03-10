@@ -4,19 +4,18 @@
 namespace App\Http\Controllers;
 use Validator;
 use App\Traits\Image;
-use App\Http\Requests\requestProduct;
-use App\Http\Requests\updateProductRequest;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use App\Models\User;
-use Illuminate\Support\Facades\DB;
+use App\Traits\notification_database;
+use App\Http\Requests\Products\{
+    requestProduct,
+    requestUpdateProduct
+};
 use App\Models\Product;
-use App\Models\Category;
-use App\Models\Photo;
+use Illuminate\Support\Facades\DB;
+
 
 class ProductController extends BaseController
 {
-    use Image;
+    use Image,notification_database;
 
 
     public function index(){
@@ -27,21 +26,22 @@ class ProductController extends BaseController
 
     public function store(requestProduct $request)
     {
+
         $product=Product::create($request->all());
 
       foreach ($request->file('images') as $image) {
             $photoPath = $this->storeImage($image,$product,'/images/product_photo/');
         }
-
-             return $this->sendResponse($product,'product create successfully');
+        $this->send_notification($product);
+        return $this->sendResponse($product,'product create successfully, please wait to accept it by admin.');
     }
 
 
     public function show(string $id)
     {
-        $product=Product::with(['photos','user'])->find($id);
+        $product=Product::find($id)->with(['photos','user'])->get();
         if($product){
-            $product->get();
+
             return $this->sendResponse($product,'done');
         }
         return $this->sendError('','Invalid',500);
@@ -50,7 +50,7 @@ class ProductController extends BaseController
 
 
 
-     public function Update(updateProductRequest $request,$id){
+     public function Update(requestUpdateProduct $request,$id){
         $product=Product::find($id);
 
         if($product){
@@ -59,7 +59,6 @@ class ProductController extends BaseController
             if($request->hasFile('images')){
             foreach ($request->file('images') as $newImage) {
                 $photoPath=$this->updateImageProduct($newImage,$product,'/images/product_photo/');
-
             }
             return $this->sendResponse($product,'Product updated successfully');
         }
@@ -76,12 +75,11 @@ class ProductController extends BaseController
             return $this->sendError('','product not found');
         }
         else{
-            DB::transaction(function () use ($product) {
-
+          return  DB::transaction(function () use ($product) {
                 $product->delete();
-
+                return $this->sendResponse('','Product deleted successfully');
             });
-        return $this->sendResponse('','Product deleted successfully');
+
         }
     }
 }

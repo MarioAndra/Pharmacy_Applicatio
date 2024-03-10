@@ -3,21 +3,19 @@ namespace App\Traits;
 use App\Models\Photo;
 trait Image
 {
-    public function storeImage($file,$user,$path)
+    public function storeImage($file,$x,$path)
     {
         $filename = time().'.'.$file->getClientOriginalName();
 
         $file->move(public_path($path),$filename);
         $photo = new Photo;
-        $photo->rcs = '/images/'.$filename;
-        $user->photos()->save($photo);
-        return $this->sendResponse($user, 'User created successfully');
-
+        $photo->rcs = $filename;
+        $x->photos()->save($photo);
     }
-    public function updateImage($file,$user,$path){
+    public function updateImage($file,$x,$path){
         $filename=time().'.'.$file->getClientOriginalName();
         $file->move(public_path($path), $filename);
-            $photo = $user->photos()->first();
+            $photo = $x->photos()->first();
             if ($photo) {
 
                 $photo->update(['rcs' => $filename]);
@@ -31,6 +29,10 @@ trait Image
         $product->photos()->update(['rcs'=>$filename]);
         $product->save();
     }
+
+    
+
+
 
 
 }
