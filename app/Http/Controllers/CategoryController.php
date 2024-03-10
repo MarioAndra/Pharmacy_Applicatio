@@ -49,9 +49,8 @@ class CategoryController extends BaseController
         $category=Category::find($id);
         if($category){
             $category->update($request->all());
-            $category->save();
-            if($request->hasFile('image')){
-                $photoPath=$this->updateImage($request->file('image'),$category,'/images/category_photo/');
+         if($request->hasFile('image')){
+            $photoPath=$this->updateImage($request->file('image'),$category,'/images/category_photo/');
         }
         return $this->sendResponse('','Category updated successfully');
     }
@@ -70,7 +69,7 @@ class CategoryController extends BaseController
         }
         else{
            return DB::transaction(function () use ($category) {
-            $category->photos()->delete();
+               $category->photos()->delete();
                $category->delete();
                return $this->sendResponse('','category deleted successfuly');
         });

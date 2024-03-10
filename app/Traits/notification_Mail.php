@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\Notification;
 trait notification_Mail{
     public function send_notify($product,$admin,$statues){
         $user=$product->user;
-        $user->notify(new statues_product("The product: $product->name $statues by $admin->name"));
+        $user->notify(new statues_product("The product: $product->name $statues by $admin"));
 
     }
 }

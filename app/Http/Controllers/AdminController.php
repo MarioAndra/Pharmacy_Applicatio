@@ -30,7 +30,7 @@ class AdminController extends BaseController
             return $this->sendError('','Invalid',401);
         }
         $product->update(['status'=>'accepted']);
-            $this->send_notify($product,Auth::user(),'accepted');
+            $this->send_notify($product,Auth::user()->name,'accepted');
 
          return $this->sendResponse('','the product has been accepted');
 }
@@ -45,7 +45,7 @@ class AdminController extends BaseController
         }
         $product->update(['status'=>'rejected']);
 
-            $this->send_notify($product,Auth::user(),'rejected');
+            $this->send_notify($product,Auth::user()->name,'rejected');
 
         return $this->sendResponse('','the product has been rejected');
     }

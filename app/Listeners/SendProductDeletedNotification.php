@@ -22,7 +22,8 @@ class SendProductDeletedNotification
     public function handle(ProductRejected $event): void
     {
         $product = $event->product;
-        $user=$product->user;
-        $user->notify(new statues_product("your product $product->name is deleted from the system"));
+        $this->send_notify($product,'system','deleted');
+
     }
 }
+
