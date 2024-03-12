@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 use App\Models\User;
 use App\Traits\notification_Mail;
+use App\Traits\Products;
 use App\Models\Product;
+use Illuminate\Http\Request;
 use App\Http\Requests\Users\{loginRequest};
 use App\Notifications\statues_product;
 use Illuminate\Support\Facades\{
@@ -13,7 +15,7 @@ use Illuminate\Support\Facades\{
 
 class AdminController extends BaseController
 {
-    use notification_Mail;
+    use notification_Mail,Products;
 
     public function login(loginRequest $request){
         if(!Auth::attempt($request->only('email', 'password'))){
@@ -24,29 +26,16 @@ class AdminController extends BaseController
     }
 
 
-    public function accept($id){
+
+    public function acceptOrReject(Request $request ,$id){
         $product=Product::find($id);
         if(!$product){
-            return $this->sendError('','Invalid',401);
+            return $this->sendError('','Not Found',401);
         }
-        $product->update(['status'=>'accepted']);
-            $this->send_notify($product,Auth::user()->name,'accepted');
+        $this->Status_product($product,$request->status,Auth::user()->name);
+        return $this->sendResponse('',"the product has been  $request->status");
 
-         return $this->sendResponse('','the product has been accepted');
-}
-
-
-
-    public function reject($id){
-        $product=Product::find($id);
-        if(!$product){
-
-            return $this->sendError('','Invalid',401);
-        }
-        $product->update(['status'=>'rejected']);
-
-            $this->send_notify($product,Auth::user()->name,'rejected');
-
-        return $this->sendResponse('','the product has been rejected');
     }
+
+
 }

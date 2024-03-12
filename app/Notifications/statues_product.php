@@ -11,12 +11,11 @@ class statues_product extends Notification
 {
     use Queueable;
 
-    public $message;
+    
 
-
-    public function __construct($message)
+    public function __construct(public $message)
     {
-        $this->message=$message;
+
 
     }
 
@@ -26,7 +25,7 @@ class statues_product extends Notification
         return ['mail'];
     }
 
-    
+
     public function toMail(object $notifiable): MailMessage
     {
         return (new MailMessage)

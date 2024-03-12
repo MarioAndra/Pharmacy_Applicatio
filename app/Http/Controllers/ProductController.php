@@ -26,15 +26,15 @@ class ProductController extends BaseController
 
     public function store(requestProduct $request)
     {
-
-        $product=Product::create($request->all());
-
-      foreach ($request->file('images') as $image) {
-            $photoPath = $this->storeImage($image,$product,'/images/product_photo/');
-        }
-        $this->send_notification($product);
-        return $this->sendResponse($product,'product create successfully, please wait to accept it by admin.');
-    }
+        return DB::transaction(function () use ($request)  {
+            $product=Product::create($request->all());
+            foreach ($request->file('images') as $image) {
+                $photoPath = $this->storeImage($image,$product,'/images/product_photo/');
+            }
+            $this->send_notification($product);
+             return $this->sendResponse($product,'product create successfully, please wait to accept it by admin.');
+     });
+ }
 
 
     public function show(string $id)

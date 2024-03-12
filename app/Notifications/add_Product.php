@@ -11,10 +11,11 @@ class add_Product extends Notification
 {
     use Queueable;
 
-    public $product;
-    public function __construct($product)
+
+
+    public function __construct(public $product)
     {
-        $this->product=$product;
+        
     }
 
 
@@ -23,9 +24,7 @@ class add_Product extends Notification
         return ['database'];
     }
 
-    /**
-     * Get the mail representation of the notification.
-     */
+
     public function toMail(object $notifiable): MailMessage
     {
         return (new MailMessage);

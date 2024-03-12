@@ -5,7 +5,6 @@ use App\Http\Controllers\AdminController;
 
 Route::prefix('v1/')->group(function () {
 
-Route::post('accept/{id}',[AdminController::class,'accept']);
-Route::post('reject/{id}',[AdminController::class,'reject']);
+Route::post('status/{id}',[AdminController::class,'acceptOrReject']);
 
 })->middleware('admin');
