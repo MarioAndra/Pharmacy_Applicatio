@@ -6,18 +6,17 @@ use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class isAdmin
+class owner
 {
 
     public function handle(Request $request, Closure $next): Response
     {
-        $user =Auth::user();
-        return $user;
-        if ($user->isAdmin='admin') {
+
+        $user=Auth::user();
+        if($user->role_id=='1'){
             return $next($request);
         }
-        return response()->json(['Unauthorised'],403);
-
+        return response()->json(['Unauthorized'],403);
     }
 
   }

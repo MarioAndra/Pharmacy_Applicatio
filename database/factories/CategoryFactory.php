@@ -16,7 +16,7 @@ class CategoryFactory extends Factory
     {
 
         return [
-            'name_category' => $this->faker->word,
+            /*'name_category' => $this->faker->word,*/
 
         ];
     }

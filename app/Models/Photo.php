@@ -41,7 +41,10 @@ class Photo extends Model
                 $photo->rcs = asset($photo->rcs);
             });
     }
-  
+    public function apply(Builder $builder, Model $model): void
+    {
+         $builder->where('price','>=','150');
+    }
 
 
 }

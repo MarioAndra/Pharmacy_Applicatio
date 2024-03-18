@@ -10,18 +10,29 @@ use App\Http\Requests\Products\{
     requestUpdateProduct
 };
 use App\Models\Product;
+use App\Models\User;
 use Illuminate\Support\Facades\DB;
 
-
+use Illuminate\Support\Facades\Auth;
 class ProductController extends BaseController
 {
+
+
     use Image,notification_database;
 
 
+    public function __construct()
+    {
+        $this->authorizeResource(Product::class, 'product');
+    }
+
     public function index(){
+
+
         $product=Product::with(['photos','user'])->get();
         return $this->sendResponse($product,'done');
     }
+
 
 
     public function store(requestProduct $request)
@@ -37,21 +48,21 @@ class ProductController extends BaseController
  }
 
 
-    public function show(string $id)
-    {
-        $product=Product::find($id)->with(['photos','user'])->get();
-        if($product){
+ public function show(Product $product)
+ {
 
-            return $this->sendResponse($product,'done');
-        }
-        return $this->sendError('','Invalid',500);
-    }
+     if($product){
 
-
+         return $this->sendResponse($product,'done');
+     }
+     return $this->sendError('','Invalid',500);
+ }
 
 
-     public function Update(requestUpdateProduct $request,$id){
-        $product=Product::find($id);
+
+
+
+     public function Update(requestUpdateProduct $request,Product $product){
 
         if($product){
 
@@ -68,14 +79,15 @@ class ProductController extends BaseController
 }
 
 
-    public function destroy(string $id)
+    public function destroy(Product $product)
     {
-        $product=Product::find($id);
+
         if(!$product){
             return $this->sendError('','product not found');
         }
         else{
           return  DB::transaction(function () use ($product) {
+                $product->photos()->delete();
                 $product->delete();
                 return $this->sendResponse('','Product deleted successfully');
             });

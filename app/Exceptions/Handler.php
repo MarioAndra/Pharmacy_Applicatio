@@ -51,18 +51,6 @@ class Handler extends ExceptionHandler
             ], 403);
         }
 
-        if ($e instanceof UniqueConstraintViolationException) {
-            return response()->json([
-                'message' => 'This record already exists.',
-            ]);
-        }
-
-        if ($e instanceof QueryException) {
-            return response()->json([
-                'message' => 'Unknown sql error.',
-            ]);
-        }
-
         return parent::render($request, $e);
     }
 }

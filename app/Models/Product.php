@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Models;
-use App\Models\Scopes\priceScope;
+use App\Scopes\price;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Carbon\Carbon;
@@ -51,7 +51,7 @@ class Product extends Model
 
     protected static function booted(): void
     {
-        static::addGlobalScope(new priceScope);
+        static::addGlobalScope(new price);
     }
 
     public function scopeStartsWithA($query)

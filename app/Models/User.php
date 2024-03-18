@@ -25,7 +25,7 @@ class User extends Authenticatable
        'name',
        'email',
        'number',
-       'isAdmin',
+       'role_id',
     ];
 
 
@@ -63,6 +63,20 @@ class User extends Authenticatable
     public function photos(){
         return $this->morphMany(Photo::class,'photoable');
     }
+
+
+    public function roles()
+    {
+        return $this->belongsTo(Role::class,'role_id');
+    }
+
+    public function hasPermissionTo($permission){
+        return $this->roles()->whereHas('permissions',function ($query)use ($permission){
+            $query->where('name',$permission);
+        })->exists();
+    }
+
+
 
 
 }

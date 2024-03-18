@@ -14,10 +14,11 @@ class ProductFactory extends Factory
     public function definition(): array
     {
         return [
-            'name_product' => $this->faker->word,
+           /* 'name' => $this->faker->word,
             'price' => $this->faker->randomFloat(2, 10, 1000),
+            'satatus'=>$this->faker->word,
             'category_id' => Category::factory()->create(),
-            'user_id'=>User::factory()->create(),
+            'user_id'=>User::factory()->create(),*/
 
         ];
     }

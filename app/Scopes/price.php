@@ -1,14 +1,16 @@
 <?php
 
-namespace App\Models\Scopes;
+namespace App\Scopes;
 
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Scope;
 
-class priceScope implements Scope
+class price implements Scope
 {
-    
+    /**
+     * Apply the scope to a given Eloquent query builder.
+     */
     public function apply(Builder $builder, Model $model): void
     {
          $builder->where('price','>=','150');

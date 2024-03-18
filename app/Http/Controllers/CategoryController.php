@@ -6,6 +6,8 @@ use App\Http\Requests\Categories\{
     requestCategory,
     requestUpdateCategory
 };
+
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use App\Models\Category;
 
@@ -15,9 +17,14 @@ class CategoryController extends BaseController
 {
     use Image;
 
+    public function __construct()
+    {
+        $this->authorizeResource(Category::class, 'category');
+    }
+
     public function index(){
         $category = Category::with('subCategories')
-        ->parent()->get();
+        ->get();
         return $this->sendResponse($category,'done');
     }
 
@@ -30,23 +37,21 @@ class CategoryController extends BaseController
     }
 
 
-    public function show(string $id)
+    public function show(Category $category)
     {
-        $category = Category::find($id);
 
         if(!$category){
             return $this->sendError('', 'This category not found');
         }
         else{
-            $category = Category::with('subCategories')->find($id);
+
         return $this->sendResponse($category, 'Done');
     }
 
 
 }
 
-    public function Update(requestUpdateCategory $request,$id){
-        $category=Category::find($id);
+    public function Update(requestUpdateCategory $request,Category $category){
         if($category){
             $category->update($request->all());
          if($request->hasFile('image')){
@@ -61,9 +66,9 @@ class CategoryController extends BaseController
 
 
 
-    public function destroy(string $id)
+    public function destroy(Category $category)
     {
-        $category=Category::find($id);
+
         if(!$category){
             return $this->sendError('','this category not found',500);
         }

@@ -19,18 +19,26 @@ use Illuminate\Support\Facades\Auth;
 class UserController extends BaseController
 {
     use Image;
+    public function __construct()
+    {
+        $this->authorizeResource(User::class, 'user');
+    }
 
+    
     public function index(){
-        $user=User::with(['photos','products.photos'])->get();
-        return $this->sendResponse($user,'done');
+            $user=User::with(['photos','products.photos'])->get();
+            return $this->sendResponse($user,'done');
+
+        return 'invalid';
+
     }
 
 
 
 
-    public function show(string $id)
+    public function show(User $user)
     {
-        $user=User::find($id)->with(['products.photos'])->get();
+        $user->load(['products.photos'])->get();
         return $this->sendResponse($user,'Done');
     }
 
@@ -38,6 +46,7 @@ class UserController extends BaseController
 
     public function store(requestUser $request, requestPassword $passwordRequest)
     {
+
         $user = new User;
         $user->fill($request->all());
         $user->password = $passwordRequest->input('password');
@@ -50,9 +59,10 @@ class UserController extends BaseController
 
 
 
-   public function Update(requestUpdateUser $request,string $id)
+   public function Update(requestUpdateUser $request,User $user)
     {
-        $user=User::find($id);
+
+
         if($user){
             $request->except('password');
             $user->update($request->all());
@@ -66,8 +76,8 @@ class UserController extends BaseController
 
 
 
-    public function updatePassword(requestPassword $requestPasssowrd,$id){
-        $user=User::find($id);
+    public function updatePassword(requestPassword $requestPasssowrd,User $user){
+
         if($user){
             $user->forceFill([
                 'password'=>$requestPasssowrd->password,
@@ -80,9 +90,10 @@ class UserController extends BaseController
 
 
 
-    public function destroy($id)
+    public function destroy(User $user)
     {
-        $user=User::find($id);
+
+
         if(!$user){
             return $this->sendError('','user not found',403);
         }

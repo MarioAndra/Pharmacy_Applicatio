@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests\Users;
+namespace App\Http\Requests\u_permission;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class requestUser extends FormRequest
+class U_permissionRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,11 +22,9 @@ class requestUser extends FormRequest
     public function rules(): array
     {
         return [
-            'name'=>'required|string|min:3|max:15',
-            'email'=>'required|email',
-            'number'=>'required|between:10,10',
-            'role_id'=>'required',
-            'image' => 'required|image|mimes:jpg,png,gif|max:2765|dimensions:max_width=3840,max_height=2160|'
+
+                'permissions' => 'required|array'
+
         ];
     }
 }

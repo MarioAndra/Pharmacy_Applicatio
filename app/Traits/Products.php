@@ -1,6 +1,7 @@
 <?php
 namespace App\Traits;
 use App\Models\Product;
+use App\Models\Role;
 use App\Traits\notification_Mail;
 use App\Http\Controllers\BaseController;
 trait Products
@@ -10,5 +11,10 @@ trait Products
         $product->update(['status'=>$status]);
         $this->send_notify($product,$admin,$status);
     }
+
+
+
+
+    
 
 }

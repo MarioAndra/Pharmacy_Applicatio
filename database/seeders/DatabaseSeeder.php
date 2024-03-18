@@ -4,7 +4,7 @@ namespace Database\Seeders;
 use App\Models\User;
 use App\Models\Product;
 use App\Models\Category;
-
+use App\Models\Role;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -15,11 +15,14 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
+        $this->call(RoleSeed::class);
 
-            Category::factory(200)->create();
-            Product::factory(100)->create();
-            User::factory(200)->create();
-
+        $user=User::create(['name'=>'mario',
+        'number'=>'0937723418',
+        'email'=>'mario@gamil.com',
+        'password'=>'123456789',
+        'role_id'=>1
+    ]);
 
 
     }
