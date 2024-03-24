@@ -1,22 +1,13 @@
 <?php
 
 namespace App\Policies;
-
 use App\Models\Product;
 use App\Models\User;
+use App\classes\Before;
 use Illuminate\Auth\Access\Response;
 use Illuminate\Auth\Access\HandlesAuthorization;
-class product_policy
+class product_policy extends Before
 {
-    use HandlesAuthorization;
-    public function before(User $user, string $ability): bool|null
-{
-    if ($user->role_id=='1') {
-        return true;
-    }
-
-    return null;
-}
 
     public function viewAny(User $user): bool
     {
@@ -38,13 +29,13 @@ class product_policy
 
     public function update(User $user, Product $product): bool
     {
-        return $user->hasPermissionTo('update_product');
+        return $user->hasPermissionTo('update_product')||$usre->id==$product->user_id;
     }
 
 
     public function delete(User $user, Product $product): bool
     {
-        return $user->hasPermissionTo('delete_product');
+        return $user->hasPermissionTo('delete_product')||$usre->id==$product->user_id;
     }
 
 

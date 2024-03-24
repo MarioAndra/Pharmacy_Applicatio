@@ -9,10 +9,10 @@ use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Database\Eloquent\Concerns\HasAttributes;
 use Illuminate\Support\Facades\Hash;
 use Carbon\Carbon;
-use App\Traits\Image;
+use App\Traits\Filter;
 class User extends Authenticatable
 {
-    use HasApiTokens, HasFactory, Notifiable,Image;
+    use HasApiTokens, HasFactory, Notifiable,Filter;
 
 
 

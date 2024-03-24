@@ -1,23 +1,15 @@
 <?php
 
 namespace App\Policies;
-
+use App\classes\Before;
 use App\Models\User;
 use Illuminate\Auth\Access\Response;
 use Illuminate\Auth\Access\HandlesAuthorization;
-class user_policy
+class user_policy extends Before
 {
 
     use HandlesAuthorization;
 
-    public function before(User $user, string $ability): bool|null
-{
-    if ($user->role_id=='1') {
-        return true;
-    }
-
-    return null;
-}
 
     public function viewAny(User $user): bool
     {

@@ -6,18 +6,18 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Carbon\Carbon;
 use App\Traits\Image;
+use App\Traits\Filter;
 use Illuminate\Support\Facades\Storage;
 class Product extends Model
 {
 
-    use HasFactory,Image;
+    use HasFactory,Image,Filter;
     protected $fillable = [
         'name',
         'price',
         'category_id',
         'user_id',
         'status',
-
     ];
 
     public function toArray()
@@ -61,5 +61,35 @@ class Product extends Model
         });
     }
 
+
+    public function scopeFilters($query, array $filters)
+{
+    if (isset($filters['category_name'])) {
+       $this->filter_category_name($query,$filters);
+    }
+
+    if (isset($filters['category_product_count'])) {
+         $this->filter_category_product_count($query,$filters);
+
+    }
+
+    return $query;
+}
+
+
+
+
+
+
+
+
+public function scopeStatus($query, $status)
+{
+    if (in_array($status, ['accepted', 'rejected','prepering'])) {
+        return $query->where('status', $status);
+    }
+
+    return $query;
+}
 
 }

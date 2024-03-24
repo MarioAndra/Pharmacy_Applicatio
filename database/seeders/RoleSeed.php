@@ -30,11 +30,11 @@ class RoleSeed extends Seeder
         $allPermissions = Permission::all('id')->pluck('id')->toArray();
         foreach ($roles as $role) {
             $roleModel = Role::where('name', $role)->first();
-            $roleModel->permissions()->attach($allPermissions);
+            $roleModel->permissions()->create($allPermissions);
         }
 
         $u_permission = Permission::create(['name' => 'u_permission']);
         $ownerRole = Role::where('name', 'owner')->first();
-        $ownerRole->permissions()->attach($u_permission->id);
+        $ownerRole->permissions()->create($u_permission->id);
     }
 }

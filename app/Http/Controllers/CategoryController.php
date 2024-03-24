@@ -6,7 +6,7 @@ use App\Http\Requests\Categories\{
     requestCategory,
     requestUpdateCategory
 };
-
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use App\Models\Category;
@@ -22,8 +22,8 @@ class CategoryController extends BaseController
         $this->authorizeResource(Category::class, 'category');
     }
 
-    public function index(){
-        $category = Category::with('subCategories')
+    public function index(Request $request){
+        $category = Category::filter($request->all())
         ->get();
         return $this->sendResponse($category,'done');
     }

@@ -51,6 +51,11 @@ class Handler extends ExceptionHandler
             ], 403);
         }
 
+        if ($e instanceof QueryException) {
+            return response()->json(['error' => 'Not Found'], 400);
+        }
+
+
         return parent::render($request, $e);
     }
 }

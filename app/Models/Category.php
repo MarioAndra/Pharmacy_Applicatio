@@ -5,14 +5,15 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Traits\Image;
+use App\Traits\Filter;
 use Illuminate\Support\Facades\Storage;
 class Category extends Model
 {
 
 
-    use HasFactory,Image;
+    use HasFactory,Image,Filter;
     protected $fillable = [
-        'name_category',
+        'name',
         'parent_id',
 
     ];
@@ -55,10 +56,6 @@ class Category extends Model
     public function scopeParent(Builder $builder) {
         $builder->whereNull('parent_id');
     }
-
-
-
-
 
 
 

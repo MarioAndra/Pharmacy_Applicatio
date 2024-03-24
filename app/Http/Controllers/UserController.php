@@ -8,6 +8,9 @@ use App\Http\Requests\Users\{
     requestUpdateUser,
     requestPassword
 };
+use App\Http\Requests\Filter\{
+    FilterRequest
+};
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
@@ -24,13 +27,13 @@ class UserController extends BaseController
         $this->authorizeResource(User::class, 'user');
     }
 
-    
-    public function index(){
-            $user=User::with(['photos','products.photos'])->get();
-            return $this->sendResponse($user,'done');
 
-        return 'invalid';
+    public function index(Request $request){
 
+
+         $user=User::with(['photos','products.photos'])->filter($request->all())->get();
+
+         return $this->sendResponse($user,'done');
     }
 
 

@@ -9,6 +9,7 @@ use App\Http\Requests\Products\{
     requestProduct,
     requestUpdateProduct
 };
+use Illuminate\Http\Request;
 use App\Models\Product;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
@@ -26,10 +27,14 @@ class ProductController extends BaseController
         $this->authorizeResource(Product::class, 'product');
     }
 
-    public function index(){
+    public function index(Request $request){
 
 
-        $product=Product::with(['photos','user'])->get();
+        $product=Product::with(['photos','user'])
+        ->status($request->status)
+        ->filter($request->all())
+        ->filters($request->all())
+        ->get();
         return $this->sendResponse($product,'done');
     }
 

@@ -1,21 +1,14 @@
 <?php
 
 namespace App\Policies;
-
+use App\classes\Before;
 use App\Models\Role;
 use App\Models\User;
 use Illuminate\Auth\Access\Response;
 
-class U_permission_policy
+class U_permission_policy extends Before
 {
-    public function before(User $user, string $ability): bool|null
-    {
-        if ($user->role_id=='1') {
-            return true;
-        }
 
-        return null;
-    }
 
     public function update(User $user, Role $role): bool
     {

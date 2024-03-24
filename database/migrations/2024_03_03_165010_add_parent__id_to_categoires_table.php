@@ -15,7 +15,7 @@ return new class extends Migration
             $table
             ->foreignId('parent_id')
             ->nullable()
-            ->after('name_category')
+            ->after('name')
             ->constrained('categories')
             ->cascadeOnDelete()
             ->cascadeOnUpdate();
